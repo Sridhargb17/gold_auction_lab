@@ -1,6 +1,6 @@
 import pandas as pd
 
-def apply_business_logic(df, gold_rate_18k=13100, office_location="Vellore"):
+def apply_business_logic(df, gold_rate_18k, office_location):
     """
     Enhanced Logic:
     1. Gold Valuation (18K + 3% GST)
@@ -51,8 +51,8 @@ def apply_business_logic(df, gold_rate_18k=13100, office_location="Vellore"):
     # --- 5. Final Decision ---
     def final_decision(row):
         if pd.isna(row['Bid Starting Price']): return "Skip: No Price"
-        if row['Adjusted Profit Margin'] < 5000: return "DONT TOUCH"
-        if row['Adjusted Profit Margin'] > 15000: return "🔥 POTENTIAL HIGH PROFIT"
+        if row['Adjusted Profit Margin'] < 15000: return "DONT TOUCH"
+        # if row['Adjusted Profit Margin'] > 15000: return "🔥 POTENTIAL HIGH PROFIT"
         return "Biddable"
 
     df['Auction Decision'] = df.apply(final_decision, axis=1)
