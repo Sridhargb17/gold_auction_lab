@@ -16,9 +16,11 @@ def run_pipeline(file_path, gold_rate_18k, office_location="Vellore"):
 
     # 2. Merge Data
     grouped_df.reset_index(inplace=True)
-    # Ensure Lot No is string for clean merging
-    grouped_df['Lot No'] = grouped_df['Lot No'].astype(str)
-    rates_df['Lot No'] = rates_df['Lot No'].astype(str)
+    
+    # ---> THE FIX IS HERE <---
+    # Ensure Lot No is string, drop leading zeros, and make uppercase for a perfect merge
+    grouped_df['Lot No'] = grouped_df['Lot No'].astype(str).str.lstrip('0').str.upper()
+    rates_df['Lot No'] = rates_df['Lot No'].astype(str).str.lstrip('0').str.upper()
     
     final_df = pd.merge(grouped_df, rates_df, on='Lot No', how='outer')
 
@@ -28,7 +30,6 @@ def run_pipeline(file_path, gold_rate_18k, office_location="Vellore"):
     return final_df
 
 if __name__ == "__main__":
-    # Standard CLI execution if needed
     path = r"C:\Users\Guest1\Workspace\gold_analysis\Samil_3-2-2026_12-33-48_PM_Inventory_List.xls"
     results = run_pipeline(path, 13100)
     print(results.head())
